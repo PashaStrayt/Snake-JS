@@ -1,6 +1,7 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
+let speed = 135.0;
 let score = 0;
 const box = 32;
 
@@ -50,7 +51,7 @@ function gameLoop() {
         eating();
 
         // Collision
-        if (i != 0 && snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
+        if (typeof(snake[i]) && i != 0 && snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
             alert('GAME OVER');
             defaultSnake();
         }
@@ -72,8 +73,7 @@ function gameLoop() {
 }
 
 // Start game looping
-let looper = setInterval(gameLoop, 135);
-
+var looper = setInterval(gameLoop, speed);
 function eating() {
     let tx = 0;
     let ty = 0;
@@ -90,7 +90,7 @@ function eating() {
 
         setFood();
 
-        document.getElementById('score').innerHTML = score;
+        document.getElementById('score').innerHTML = 'SCORE: ' + score;
     }
 }
 
@@ -112,7 +112,7 @@ function defaultSnake() {
 
     dir = null;
     score = 0;
-    document.getElementById('score').innerHTML = score;
+    document.getElementById('score').innerHTML = 'SCORE: ' + score;
     maxTails = 3;
 
     snake[0] = {
@@ -131,4 +131,16 @@ function defaultSnake() {
 
 function getRandomFloor(max, min) {
     return Math.floor(Math.random() * (max - min) + min);
+}
+
+function changeSpeed(sp, id) {
+    let kind = 'changeSpeed-active';
+    document.getElementsByClassName(kind)[0].classList.toggle(kind);
+    document.getElementsByClassName('changeSpeed')[id].classList.toggle(kind);
+    
+    speed = 135 / sp;
+    clearInterval(looper);
+    looper = setInterval(gameLoop, speed);
+    
+    console.log(speed);
 }
